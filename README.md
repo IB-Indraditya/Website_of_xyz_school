@@ -1,6 +1,7 @@
 # Website_of_xyz_school
 Hosted via Google Firebase
 Link: https://kentork.web.app
+
 Home Page
 ![image](https://github.com/user-attachments/assets/70cca460-5322-442f-a617-3bef07a318d6)
 Registration Page
