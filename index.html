@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>XYZ School</title>
+    <link rel="icon" type="text/css" href="logo1.png">
+	<style type="text/css">
+        #preloader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white; /* Background color for the preloader */
+            z-index: 9999; /* Make sure the preloader is above all content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Spinner Animation */
+        .spinner img{
+
+            /*border: 20px solid #f3f3f3;
+            border-top: 10px solid #3498db;*/
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            filter: hue-rotate(230deg) contrast(100%) saturate(200%);
+        }
+	</style>
+</head>
+<body>
+    <script>
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            const content = document.querySelector('.container');
+            
+            // Hide the preloader once the content is fully loaded
+            setTimeout(function() {
+                preloader.style.display = 'none';  // Hide the preloader
+                document.style.display = 'block';    // Show the content after preloader is hidden
+            }, 1200); 
+        });
+    </script>
+    <div id="preloader">
+        <div class="spinner"><img src="https://loading.io/assets/mod/spinner/default/sample.gif"></div>
+    </div>
+	<section id='scheader'></section>
+	<section id='scmain'></section>
+	<section id='scfooter'></section>
+
+	<script type="text/javascript">
+		// window.onload=()=>{setTimeout('location.reload()',50000);}
+	</script>
+	<script>
+            function loadHTML(file, elementId) {
+                fetch(file, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const element = document.getElementById(elementId);
+                    element.innerHTML = data;
+                    executeScripts(element);
+                })
+                .catch(error => console.error('Error loading the HTML file:', error));
+            }
+
+            // Function to execute scripts within the loaded HTML content
+            function executeScripts(element) {
+                const scripts = element.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.type = script.type || 'text/javascript';
+                    if (script.src) {
+                        newScript.src = script.src;
+                        newScript.onload = () => script.remove();
+                        document.head.appendChild(newScript);
+                    } else {
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                    }
+                });
+            }
+            loadHTML('header.html', 'scheader');
+            loadHTML('main.html', 'scmain');
+            loadHTML('footer.html', 'scfooter');
+
+            // loadHTML('footer.html', 'ttsfooter');
+
+    </script>
+</body>
+
+</html>

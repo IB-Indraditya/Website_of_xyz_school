@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Scrolling Image Carousel with Indicators</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Akshar' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!-- Lightbox CSS (for image zoom functionality) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" />
+
+    <style>
+    	/*body{
+    		background: url('https://plus.unsplash.com/premium_photo-1682125773446-259ce64f9dd7?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZWR1Y2F0aW9uJTIwYmFja2dyb3VuZHxlbnwwfHwwfHx8MA%3D%3D') cover !important;
+    		background-repeat: no-repeat;
+    		background-attachment: fixed;
+    		background-position: bottom;
+    	}*/
+        /* Carousel size */
+        .carousel {
+            margin-bottom: 0px;
+        }
+
+        /* Ensure all images have the same size */
+        .carousel-item img {
+            height: 50vw; /* Set a fixed height for all images */
+            object-fit: cover; /* Ensures the images fill the container without stretching */
+            width: 100%; /* Full width */
+        }
+
+        .dropdown-menu {
+            z-index: 1000; /* Ensure dropdown appears on top */
+        }
+
+        .content-section, .content-sectionc {
+            padding: 50px;
+            text-align: center;
+        	background: url('https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-033.jpg');
+        	background-repeat: no-repeat;
+        	background-size: cover;
+    		background-attachment: fixed;
+    		background-position: center;
+
+        }
+        .content-sectionc{
+        	background: url('https://img.freepik.com/free-vector/gradient-international-day-education-background_23-2151120687.jpg');
+        	background-repeat: no-repeat;
+        	background-size: cover;
+    		background-attachment: fixed;
+    		background-position: center;
+        }
+
+        /* Caption styles */
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .carousel-caption h5 {
+            font-size: 2rem;
+        }
+
+        .carousel-caption p {
+            font-size: 1.2rem;
+        }
+        .aboutcontain, .aboutcontain2{
+        	display: flex;
+        }
+        .aboutcontain2{
+        	direction: rtl;
+        }
+        .abouttext{
+        	text-align: left;
+        	color: dimgray;
+        }
+        .content-section h2, .content-sectionc h2{
+        	margin: 20px auto;
+        	color: darkblue;
+        	text-align: center;
+        }
+        .textpart{
+        	text-align: center;
+        	width: 950px;
+        	height: 450px;
+        	margin: 1vw;
+        	padding: 0 10px;
+        }
+        .imgpart{
+        	/*width: 450px;
+        	height: 450px;
+        	border: solid 1px;*/
+        	margin: 1.5vw auto;
+        }
+        .imgpart img{
+        	width: 380px;
+        	border: solid 5px ghostwhite;
+        	height: 400px;
+        	margin: 1vw;
+        	border-radius: 0px;
+        	box-shadow: 0 0 7px 1px grey;
+        }
+        .info-box{
+        	background: ghostwhite;
+        	padding: 40px;
+        	box-shadow: 0 0 8px grey;
+        }
+        .info-box h3{
+        	color: dimgray;
+        }
+        iframe{
+        	box-shadow: 0 0 8px grey;
+
+        }
+        @media (max-width: 1260px) {
+        	iframe{
+        		width: 45vw;
+        		height: 35vw;
+        	}
+        	.textpart{
+        		width: auto;
+        		height: auto;
+        	}
+        }
+        @media (max-width: 1100px){
+        	.aboutcontain, .aboutcontain2{
+        		display: block;
+        	}
+        	.textpart{
+        		width: auto;
+        		height: auto;
+        	}
+
+        	
+        }
+         @media (max-width: 1000px){
+        	.aboutcontain, .aboutcontain2{
+        		display: block;
+        	}
+        	iframe{
+        		width: 45vw;
+        		height: 40vw;
+        		margin: 40px auto;
+        	}
+        	
+        }
+        @media (max-width: 600px){
+            .carousel img{
+                height: 60vw;
+            }
+        	.imgpart img{
+        		width: 330px;
+        		height: 300px;
+        	}
+        	.textpart{
+        		width: auto;
+        		height: auto;
+        	}
+        	iframe{
+        		width: 60vw;
+        		height: 40vw;
+        		margin: 40px auto;
+        	}
+        }
+        @media (max-width: 370px){
+        	.imgpart img{
+        		width: 280px;
+        		height: 250px;
+        	}
+        	.textpart{
+        		width: auto;
+        		height: auto;
+        	}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bootstrap Carousel with autoplay, indicators, and captions -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+
+        <!-- Carousel Inner -->
+        <div class="carousel-inner">
+            <!-- First Slide (active) -->
+            <div class="carousel-item active">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Hibbing_High_School_2014.jpg/1200px-Hibbing_High_School_2014.jpg" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Beautiful High School</h5>
+                    <p>A modern and innovative school campus built with care.</p>
+                </div>
+            </div>
+            <!-- Second Slide -->
+            <div class="carousel-item">
+                <img src="https://www.staugustinescentrehalifax.org.uk/media/blog-images/Kids_in_school.jpg.1500x1500_q85.jpg" class="d-block w-100" alt="Slide 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Active Learning</h5>
+                    <p>Students engaging in hands-on activities in a diverse environment.</p>
+                </div>
+            </div>
+            <!-- Third Slide -->
+            <div class="carousel-item">
+                <img src="https://edsource.org/wp-content/uploads/2021/12/Oak_Tech_137-1024x683.jpg" class="d-block w-100" alt="Slide 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Classroom Discussions</h5>
+                    <p>In-depth group discussions help develop critical thinking.</p>
+                </div>
+            </div>
+            <!-- Fourth Slide -->
+            <div class="carousel-item">
+                <img src="https://www.thepeterboroughschool.co.uk/_site/data/files/images/photography/817334914346F838C187F030287C3702.jpg" class="d-block w-100" alt="Slide 4">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Outdoor Activities</h5>
+                    <p>Students enjoy extracurricular activities to boost teamwork and fitness.</p>
+                </div>
+            </div>
+            <!-- Fifth Slide -->
+            <div class="carousel-item">
+                <img src="https://c9.shauryasoft.com/media/bny-slide_209_4.jpg" class="d-block w-100" alt="Slide 5">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Modern Facilities</h5>
+                    <p>Advanced infrastructure provides a conducive environment for learning.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls (Previous/Next) -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Other Content Below Carousel -->
+    <div class="content-section">
+        <h2>About Us</h2>
+        <section class="aboutcontain">
+	        <section class="textpart">
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		    </section>
+		    <section class="imgpart">
+		    	<img src="https://modernschoolfbd.com/assets/img/about/about-banner-1.jpg">
+		    </section>
+	    </section>
+    </div>
+    <div class="content-section">
+        <h2>Aims & Objectives</h2>
+        <section class="aboutcontain2">
+	        <section class="textpart">
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		        <p class="abouttext">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		    </section>
+		    <section class="imgpart">
+		    	<img src="https://static.wixstatic.com/media/11062b_6864d981fa86430f84b3926857b21d8c~mv2.jpg/v1/fill/w_640,h_1058,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/11062b_6864d981fa86430f84b3926857b21d8c~mv2.jpg">
+		    </section>
+	    </section>
+    </div>
+    <section id="scgallery"></section>
+    <section id="contact" class="content-sectionc">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Contact Us</h2>
+        </div>
+
+      </div>
+
+      <div class="container">
+
+        <div class="row mt-5">
+
+          <div class="col-lg-6">
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="info-box">
+                  <i class="bx bx-map"></i>
+                  <h3>Our Address</h3>
+                  <p>Adress details, Kolkata-70000, State</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-envelope"></i>
+                  <h3>Email Us</h3>
+                  <p>emailid@gmail.com</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-phone-call"></i>
+                  <h3>Call Us</h3>
+                  <p>Contact_number</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-6">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3686.4547957372706!2d88.18620787512403!3d22.487113479552697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027dc4311dba6f%3A0x9f3b3dd90ef0fa25!2sDesign%20Global%20-%20Empowering%20Your%20Digital%20Presence%20%7C%20Expert%20Web%20Design%20Agency!5e0!3m2!1sen!2sin!4v1728651305408!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <section style="padding: 5px;">
+    </section>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+	<!-- Lightbox JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+	
+    <script>
+
+            function loadHTML(file, elementId) {
+                fetch(file, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const element = document.getElementById(elementId);
+                    element.innerHTML = data;
+                    executeScripts(element);
+                })
+                .catch(error => console.error('Error loading the HTML file:', error));
+            }
+
+            // Function to execute scripts within the loaded HTML content
+            function executeScripts(element) {
+                const scripts = element.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.type = script.type || 'text/javascript';
+                    if (script.src) {
+                        newScript.src = script.src;
+                        newScript.onload = () => script.remove();
+                        document.head.appendChild(newScript);
+                    } else {
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                    }
+                });
+            }
+            loadHTML('gallery.html', 'scgallery');
+
+            // loadHTML('footer.html', 'ttsfooter');
+
+    </script>
+</body>
+</html>

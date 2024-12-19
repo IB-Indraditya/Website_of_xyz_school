@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <!-- Include Custom Alert CSS and HTML here -->
+
+    <style>
+        body{
+            margin-top: 0px !important;
+            text-align: left !important;
+        }
+        h1{
+            font-size: 40px;
+            margin-bottom: 200px;
+        }
+        .dashboard{
+
+        }
+        .usercontain{
+            padding: 40px 0;
+            padding-bottom: 10px;
+            text-align: center;
+            background: url('https://img.freepik.com/premium-photo/pile-old-books-good-copy-space-blue-background-image_488220-27057.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .custom-alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 30px 40px;
+            z-index: 1001; /* Ensure it is above the overlay */
+        }
+        button{
+            border-radius: 5px;
+        }
+        .custom-alert button {
+            margin-top: 40px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000; /* Ensure it is below the alert but above other content */
+        }
+        .sb{
+            padding-bottom: 70px;
+        }
+    </style>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="custom-alert" id="customAlert">
+        <p id="alertMessage"></p>
+        <button id="alertButton">OK</button>
+    </div>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<section id="scheader"></section>
+<body>
+    <section class="usercontain">
+        <h1 class="dashboard">Welcome to Dashboard</h1>
+        <section class="sb">
+            <button id="logoutButton">Log Out</button>
+        </section>
+    </section>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+        import { getDatabase, ref, child, get, update } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAAH2fM47iHD45f3Qi3s6neigR5tWPjJ_4",
+          authDomain: "testing-a62bf.firebaseapp.com",
+          databaseURL: "https://testing-a62bf-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "testing-a62bf",
+          storageBucket: "testing-a62bf.appspot.com",
+          messagingSenderId: "852476265196",
+          appId: "1:852476265196:web:d502a8aa3da416b0121bc9",
+          measurementId: "G-MQRHR3LFWQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Redirect to login if the user is not logged in or if their "logged" status is "out"
+        const registrationId = sessionStorage.getItem('registrationId');
+        if (!registrationId) {
+            showCustomAlert('You must log in first.', () => {
+                window.location.href = 'login.html'; // Redirect to the home/login page
+            });
+        } else {
+            const dbRef = ref(db);
+            get(child(dbRef, `students/${registrationId}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const studentdata= snapshot.val();
+                    const loggedStatus = studentdata.logged;
+                    if (loggedStatus === 'out') {
+                        showCustomAlert('You must log in first.', () => {
+                            window.location.href = 'login.html'; // Redirect to login if status is "out"
+                        });
+                    }
+                    console.log(`students/${registrationId}`);
+                    document.querySelector('.dashboard').innerHTML=`Welcome to Dashboard ${studentdata.name}`;
+
+                }
+            });
+        }
+
+        // Prevent user from using the back button to return to the dashboard after leaving
+        window.onpopstate = function(event) {
+            if (!sessionStorage.getItem('registrationId')) {
+                window.location.href = 'login.html'; // Redirect to login if session is not active
+            }
+        };
+
+        // Logout function
+        document.getElementById('logoutButton').addEventListener('click', async () => {
+            const registrationId = sessionStorage.getItem('registrationId');
+            if (registrationId) {
+                const dbRef = ref(db);
+                const updates = {};
+                updates[`students/${registrationId}/logged`] = 'out'; // Update "logged" status to "out" on logout
+                await update(dbRef, updates);
+            }
+
+            sessionStorage.removeItem('registrationId'); // Clear session
+            showCustomAlert('Logged out successfully.', () => {
+                window.location.href = 'login.html'; // Redirect to the home/login page
+            });
+        });
+
+        // Function to show custom alert
+        function showCustomAlert(message, callback) {
+            document.getElementById('alertMessage').innerText = message;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('customAlert').style.display = 'block';
+            document.getElementById('alertButton').onclick = function() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('customAlert').style.display = 'none';
+                if (callback) callback();
+            };
+        }
+
+        // Clear session and update "logged" status to "out" when the user leaves the page
+        window.addEventListener('beforeunload', async function() {
+            const registrationId = sessionStorage.getItem('registrationId');
+            if (registrationId) {
+                const dbRef = ref(db);
+                const updates = {};
+                updates[`students/${registrationId}/logged`] = 'out'; // Update "logged" status to "out" on page leave
+                await update(dbRef, updates);
+                sessionStorage.removeItem('registrationId'); // Clear session on leaving
+            }
+        });
+    </script>
+    <script>
+            function loadHTML(file, elementId) {
+                fetch(file, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const element = document.getElementById(elementId);
+                    element.innerHTML = data;
+                    executeScripts(element);
+                })
+                .catch(error => console.error('Error loading the HTML file:', error));
+            }
+
+            // Function to execute scripts within the loaded HTML content
+            function executeScripts(element) {
+                const scripts = element.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.type = script.type || 'text/javascript';
+                    if (script.src) {
+                        newScript.src = script.src;
+                        newScript.onload = () => script.remove();
+                        document.head.appendChild(newScript);
+                    } else {
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                    }
+                });
+            }
+            loadHTML('header.html', 'scheader');
+            loadHTML('footer.html', 'scfooter');
+
+            // loadHTML('footer.html', 'ttsfooter');
+
+    </script>
+</body>
+<section id="scfooter"></section>
+</html>

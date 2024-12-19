@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="text/css" href="logo1.png">
+
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            align-items: center;
+            margin: 0 auto !important;
+            padding: 0;
+            text-align: left !important;
+        }
+        .formsection, .tablesection{
+            text-align: center;
+            padding=bottom: 20px;
+        }
+        .formsection{
+            background: url('https://static.vecteezy.com/system/resources/previews/036/751/989/non_2x/ai-generated-education-poster-template-with-large-copy-space-for-text-free-photo.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 50px !important;
+        }
+        .formsection p{
+            color: maroon;
+            font-size: 20px;
+            font-style: oblique;
+        }
+        .tablesection{
+            background: url('https://img.freepik.com/free-photo/3d-render-graduation-cap-books-diploma_107791-15907.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 50px auto !important;
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+        h1{
+            font-size: 40px;
+        }
+        h1, h2 {
+            text-align: center;
+            margin: 20px auto;
+            color: darkblue;
+            font-family: 'Akshar';
+            letter-spacing: .2vw;
+        }
+        form{
+            border-radius: 5px;
+            box-shadow: 0 0 10px 1px;
+            text-align: center;
+            margin: 20px 10%;
+            font-size: 40px;
+            padding: 25px 0;
+            background-color: rgba(0, 0, 200, .2);
+           
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        input{
+            width: 100%;
+        }
+        .row {
+/*            display: flex;*/
+            gap: 10px;
+        }
+
+        /* Ensure input fields take equal width */
+        .row input {
+            margin: 20px .4vw;
+            width: 14%;
+            flex: 1;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 5px double dimgrey;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: midnightblue;
+            font-size: 20px;
+            font-style: oblique;
+        }
+        th {
+            background-color: rgba(255, 255, 255, 0.8);
+            font-style: normal;
+            font-weight: bold;
+        }
+        button {
+            border-radius: 5px;
+            padding: 5px 10px;
+            width: 100px;
+        }
+        .edit-btn, .delete-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .custom-alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 30px 40px;
+            z-index: 1001; /* Ensure it is above the overlay */
+        }
+        .custom-alert button {
+            margin-top: 40px;
+        }
+        .custom-alert input{
+            width: 90%;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Ensure it is below the alert but above other content */
+        }
+        #pwd{
+            width: auto;
+            padding: 5px;
+            border-radius: 25px;
+            color: dimgray;
+            margin-left: -70px;
+            box-shadow: none;
+        }
+        
+        #pwd:hover{
+            background-color: white;
+            color: midnightblue;
+            text-decoration: line-through;
+
+        }
+        /*#pwd:hover .fa-eye{
+            text-decoration: line-through;
+        }*/
+        @media(max-width: 900px){
+            .row input{
+                margin: 20px auto;
+            }
+        }
+        @media (max-width:700px){
+            .row input{
+                width: 50%;
+            }
+            th, td{
+                font-size: 14px;
+                border: solid 1px grey;
+                padding: 5px;
+            }
+            .tablesection button{
+                font-size: 17px !important;
+                width: 80px;
+            }
+        }
+        @media(max-width: 600px){
+            input{
+                width: 80% !important;
+            }
+            form{
+                margin: 20px -10px;
+                transform: scaleX(1.15);
+            }
+            
+        }
+        @media (max-width:500px){
+            .row input{
+                width: 50%;
+            }
+            th, td{
+                font-size: 10px;
+                font-weight: bold;
+                border: solid 1px grey;
+                padding: 5px;
+
+            }
+            .tablesection{
+                margin: auto;
+            }
+            .tablesection button{
+                font-size: 12px !important;
+                width: 70px;
+            }
+            table{
+                margin: auto;
+                transform: scaleX(.95);
+            }
+            .custom-alert{
+                text-align: center;
+                line-height: 25px;
+                padding: 20px 10px;
+                transform: translate(-50%, -50%) scaleX(1.5);            
+            }
+            #pwd{
+                margin-left: -50px;
+            }
+        }
+        @media (max-width:370px){
+            .row input{
+                width: 50%;
+            }
+            th, td{
+                font-size: 10px;
+                font-weight: bold;
+                border: solid 1px grey;
+                padding: 5px;
+                overflow-wrap: break-word;
+                word-wrap: break-all;
+            }
+            .tablesection{
+                margin: auto;
+            }
+            .tablesection button{
+                font-size: 12px !important;
+                width: 60px;
+            }
+            table{
+                transform: translateX(-3vw) scaleX(.8);
+                margin: auto;
+                
+            }
+
+        }
+    </style>
+    <div class="overlay" id="overlay"></div>
+    <div class="custom-alert" id="customAlert">
+        <p id="alertMessage"></p>
+        <button id="alertButton">OK</button>
+    </div>
+    <!-- <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAAH2fM47iHD45f3Qi3s6neigR5tWPjJ_4",
+          authDomain: "testing-a62bf.firebaseapp.com",
+          databaseURL: "https://testing-a62bf-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "testing-a62bf",
+          storageBucket: "testing-a62bf.appspot.com",
+          messagingSenderId: "852476265196",
+          appId: "1:852476265196:web:d502a8aa3da416b0121bc9",
+          measurementId: "G-MQRHR3LFWQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Register student
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const classInput = document.getElementById('class').value;
+            const sectionInput = document.getElementById('section').value;
+            const rollNumber = document.getElementById('rollNumber').value;
+            const password = document.getElementById('password').value;
+            const contact = document.getElementById('contact').value || "N/A";
+            const registrationId = document.getElementById('registrationId').value;
+
+            try {
+                await set(ref(database, 'students/' + registrationId), {
+                    name: name,
+                    class: classInput,
+                    section: sectionInput,
+                    rollNumber: rollNumber,
+                    password: password,
+                    contact: contact
+                });
+                showCustomAlert('Changes saved successfully!');
+                // alert('Student registered successfully!');
+                fetchStudentData();
+            } catch (error) {
+                console.error('Error registering student:', error);
+                document.getElementById('error-message').textContent = error.message;
+            }
+        });
+
+        // Fetch and display student data
+        function fetchStudentData() {
+            const studentRef = ref(database, 'students');
+            const studentTable = document.getElementById('student-table-body');
+
+            onValue(studentRef, (snapshot) => {
+                const data = snapshot.val();
+                studentTable.innerHTML = ''; // Clear previous data
+
+                if (data) {
+                    Object.keys(data).forEach((studentId) => {
+                        const student = data[studentId];
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${student.registrationId}</td>
+                            <td>${student.class}</td>
+                            <td>${student.section}</td>
+                            <td>${student.rollNumber}</td>
+                            <td>${student.contact}</td>
+                            <td>
+                                <button class="edit-btn" onclick="editStudent('${student.registrationId}')">Edit</button>
+                                <button class="delete-btn" onclick="deleteStudent('${student.registrationId}')">Delete</button>
+                            </td>
+                        `;
+                        studentTable.appendChild(row);
+                    });
+                } else {
+                    studentTable.innerHTML = '<tr><td colspan="6">No data available</td></tr>';
+                }
+            });
+        }
+
+        // Edit student data
+        window.editStudent = function(registrationId) {
+            window.scrollBy({
+                top:-100000000,
+                left:0,
+                behavior:'smooth'
+            });
+            const studentRef = ref(database, 'students/' + registrationId);
+            onValue(studentRef, (snapshot) => {
+                const student = snapshot.val();
+                if (student) {
+                    document.getElementById('name').value = student.name;
+                    document.getElementById('class').value = student.class;
+                    document.getElementById('section').value = student.section;
+                    document.getElementById('rollNumber').value = student.rollNumber;
+                    document.getElementById('contact').value = student.contact;
+                    document.getElementById('password').value = student.password;
+                    document.getElementById('registrationId').value = registrationId;
+                }
+            });
+        };
+
+        // Delete student data
+        window.deleteStudent = async function(registrationId) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                try {
+                    await remove(ref(database, 'students/' + registrationId));
+                    showCustomAlert('Student deleted successfully!');
+                    // alert('Student deleted successfully!');
+                    fetchStudentData();
+                } catch (error) {
+                    console.error('Error deleting student:', error);
+                }
+            }
+        };
+
+        // Fetch student data on page load
+        window.onload = function() {
+            fetchStudentData();
+        };
+        function showCustomAlert(message, callback) {
+            document.getElementById('alertMessage').innerHTML = message;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('customAlert').style.display = 'block';
+            document.getElementById('alertButton').onclick = function() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('customAlert').style.display = 'none';
+                if (callback) callback();
+            };
+        }
+    </script> -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAH2fM47iHD45f3Qi3s6neigR5tWPjJ_4",
+            authDomain: "testing-a62bf.firebaseapp.com",
+            databaseURL: "https://testing-a62bf-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "testing-a62bf",
+            storageBucket: "testing-a62bf.appspot.com",
+            messagingSenderId: "852476265196",
+            appId: "1:852476265196:web:d502a8aa3da416b0121bc9",
+            measurementId: "G-MQRHR3LFWQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Register student
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const classInput = document.getElementById('class').value;
+            const sectionInput = document.getElementById('section').value;
+            const rollNumber = document.getElementById('rollNumber').value;
+            const password = document.getElementById('password').value;
+            const contact = document.getElementById('contact').value || "N/A";
+            const registrationId = document.getElementById('registrationId').value;
+
+            try {
+                await set(ref(database, 'students/' + registrationId), {
+                    name: name,
+                    class: classInput,
+                    section: sectionInput,
+                    rollNumber: rollNumber,
+                    password: password,
+                    contact: contact
+                });
+                showCustomAlert('Changes saved successfully!');
+                document.getElementById('alertButton').style.display='block';
+                fetchStudentData();
+                clearInputFields(); // Clear fields after registration
+            } catch (error) {
+                console.error('Error registering student:', error);
+                document.getElementById('error-message').textContent = error.message;
+            }
+        });
+
+        // Fetch and display student data
+        function fetchStudentData() {
+            const studentRef = ref(database, 'students');
+            const studentTable = document.getElementById('student-table-body');
+
+            onValue(studentRef, (snapshot) => {
+                const data = snapshot.val();
+                studentTable.innerHTML = ''; // Clear previous data
+
+                if (data) {
+                    Object.keys(data).forEach((studentId) => {
+                        const student = data[studentId];
+                        const row = document.createElement('tr');
+
+                        row.innerHTML = `
+                            <td>${studentId}</td> <!-- Use studentId as registrationId -->
+                            <td>${student.name}</td>
+                            <td>${student.class}</td>
+                            <td>${student.section}</td>
+                            <td>${student.rollNumber}</td>
+                            <td>${student.contact}</td>
+                            <td>
+                                <button class="edit-btn" onclick="editStudent('${studentId}')">Edit</button>
+                                <button class="delete-btn" onclick="deleteStudent('${studentId}')">Delete</button>
+                            </td>
+                        `;
+                        studentTable.appendChild(row);
+                    });
+                } else {
+                    studentTable.innerHTML = '<tr><td colspan="6">No data available</td></tr>';
+                }
+            });
+        }
+
+        // Edit student data
+        // window.editStudent = function(registrationId) {
+        //     window.scrollBy({
+        //         top:-100000000,
+        //         left:0,
+        //         behavior:'smooth'
+        //     });
+        //     showCustomAlert("Password: <input class='adminpwd' type='password'>");
+        //     const adminpwd=document.querySelector('.adminpwd').value;
+        //     const studentRef = ref(database, 'students/' + registrationId);
+        //     onValue(studentRef, (snapshot) => {
+        //         const student = snapshot.val();
+        //             if (student) {
+        //                 document.getElementById('name').value = student.name;
+        //                 document.getElementById('class').value = student.class;
+        //                 document.getElementById('section').value = student.section;
+        //                 document.getElementById('rollNumber').value = student.rollNumber;
+        //                 document.getElementById('contact').value = student.contact;
+        //                 document.getElementById('password').value = student.password;
+        //                 document.getElementById('registrationId').value = registrationId; // Set to the current student being edited
+        //             }
+        //     });
+        // };
+        window.editStudent = function(registrationId) {
+            // Scroll to the top of the page
+            window.scrollBy({
+                top: -100000000,
+                left: 0,
+                behavior: 'smooth'
+            });
+
+            // Show password input prompt for admin
+            showCustomAlert("Enter Admin Password: <input class='adminpwd' type='password'><br><button id='verifyPwdBtn'>Ok</button>");
+            document.getElementById('alertButton').style.display='none';
+
+            // Wait for user to click the "Submit" button after entering password
+            document.getElementById('verifyPwdBtn').onclick = function() {
+                const adminpwd = document.querySelector('.adminpwd').value;
+
+                // Define the correct admin password (replace 'correct-password' with the actual password)
+                const correctAdminPassword = "adminkey"; // Change this to your actual admin password
+
+                // Check if entered password is correct
+                if (adminpwd === correctAdminPassword) {
+                    // If password is correct, fetch and display the student's data
+                    const studentRef = ref(database, 'students/' + registrationId);
+                    onValue(studentRef, (snapshot) => {
+                        const student = snapshot.val();
+                        if (student) {
+                            document.getElementById('name').value = student.name;
+                            document.getElementById('class').value = student.class;
+                            document.getElementById('section').value = student.section;
+                            document.getElementById('rollNumber').value = student.rollNumber;
+                            document.getElementById('contact').value = student.contact;
+                            document.getElementById('password').value = student.password;
+                            document.getElementById('registrationId').value = registrationId; // Set to the current student being edited
+                        }
+                    });
+
+                    // Close the custom alert
+                    hideCustomAlert();
+
+                } else {
+                    // If password is incorrect, show error message
+                    showCustomAlert("Invalid credentials. Please try again.");
+                    document.getElementById('alertButton').style.display='block';
+                }
+            };
+        };
+
+        // Function to show custom alert with content
+        // function showCustomAlert(content) {
+        //     document.getElementById('alertMessage').innerHTML = content;
+        //     document.getElementById('overlay').style.display = 'block';
+        //     document.getElementById('customAlert').style.display = 'block';
+        // }
+
+        // Function to hide the custom alert
+        function hideCustomAlert() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('customAlert').style.display = 'none';
+        }
+
+
+        // Delete student data
+        window.deleteStudent = async function(registrationId) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                try {
+                    await remove(ref(database, 'students/' + registrationId));
+                    showCustomAlert('Student deleted successfully!');
+                    fetchStudentData();
+                    clearInputFields(); // Clear fields after deletion
+                } catch (error) {
+                    console.error('Error deleting student:', error);
+                }
+            }
+        };
+
+        // Clear input fields
+        function clearInputFields() {
+            document.getElementById('name').value = '';
+            document.getElementById('class').value = '';
+            document.getElementById('section').value = '';
+            document.getElementById('rollNumber').value = '';
+            document.getElementById('contact').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('registrationId').value = ''; // Reset the registration ID
+        }
+
+        // Fetch student data on page load
+        window.onload = function() {
+            fetchStudentData();
+        };
+
+        function showCustomAlert(message, callback) {
+            document.getElementById('alertMessage').innerHTML = message;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('customAlert').style.display = 'block';
+            document.getElementById('alertButton').onclick = function() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('customAlert').style.display = 'none';
+                if (callback) callback();
+            };
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<section id="scheader"></section>
+<body>
+    <section class="formsection">
+        <h1>Welcome Admin</h1>
+        <p>Manage students and classes here.</p>
+
+        <!-- Student Registration Form -->
+        <h2>Edit Database</h2>
+        <form id="registerForm">
+            <input type="text" id="name" name="name" placeholder="Full Name" required autocomplete="name"><br>
+            <div class="row">
+                <input type="text" id="class" name="class" placeholder="Class" required autocomplete="class">
+                <input type="text" id="section" name="section" placeholder="Section" required autocomplete="section">
+                <input type="text" id="rollNumber" name="rollNumber" placeholder="Roll Number" required autocomplete="roll-number">
+            </div>
+            <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password">
+            <button id="pwd" type="button" onmouseover ="document.getElementById('password').type='text'" onmouseleave ="document.getElementById('password').type='password'"><i class="fa-regular fa-eye"></i></button><br>
+            <input type="hidden" id="registrationId" name="registrationId" required><br>
+            <input type="text" id="contact" name="contact" placeholder="Contact Details (optional)" autocomplete="tel"><br>
+            <section class="sb">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="document.querySelectorAll('input').forEach(ele => {ele.value = ''})">Clear</button>
+            </section>
+        </form>
+        <p id="error-message"></p>
+    </section>
+    <!-- Table to display student data -->
+    <section class="tablesection">
+    <h2>Student's Database</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>RegistrationId</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Roll No.</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="student-table-body">
+            <!-- Student data will be dynamically inserted here -->
+        </tbody>
+    </table>
+    </section>
+    <script>
+            function loadHTML(file, elementId) {
+                fetch(file, {
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const element = document.getElementById(elementId);
+                    element.innerHTML = data;
+                    executeScripts(element);
+                })
+                .catch(error => console.error('Error loading the HTML file:', error));
+            }
+
+            // Function to execute scripts within the loaded HTML content
+            function executeScripts(element) {
+                const scripts = element.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.type = script.type || 'text/javascript';
+                    if (script.src) {
+                        newScript.src = script.src;
+                        newScript.onload = () => script.remove();
+                        document.head.appendChild(newScript);
+                    } else {
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript).parentNode.removeChild(newScript);
+                    }
+                });
+            }
+            loadHTML('header.html', 'scheader');
+            loadHTML('footer.html', 'scfooter');
+
+            // loadHTML('footer.html', 'ttsfooter');
+
+    </script>
+</body>
+<section id="scfooter"></section>
+</html>
